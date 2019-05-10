@@ -3,7 +3,7 @@
 #include <array>
 #include <mutex>
 
-template<typename T, size_t size>
+template<typename T, size_t _size>
 class LockFreeQueue
 {
 public :
@@ -19,7 +19,7 @@ private:
 		return pos >= ringBufferSize ? pos - ringBufferSize : pos;
 	}
 
-	static constexpr size_t ringBufferSize = size + 1;
+	static constexpr size_t ringBufferSize = _size + 1;
 	std::array<std::atomic<T>, ringBufferSize> ringBuffer;
 	std::atomic<size_t> readPos = { 0 }, writePos = { 0 };
 	std::atomic<size_t> size = 0;
@@ -27,8 +27,8 @@ private:
 	std::recursive_mutex writeMutex;
 };
 
-template<typename T, size_t size>
-inline bool LockFreeQueue<T, size>::push(const T& newElement)
+template<typename T, size_t _size>
+inline bool LockFreeQueue<T, _size>::push(const T& newElement)
 {	
 	auto beforeSize = size.fetch_add(1);
 	if (beforeSize >= ringBufferSize)
@@ -54,8 +54,8 @@ inline bool LockFreeQueue<T, size>::push(const T& newElement)
 	return true;
 }
 
-template<typename T, size_t size>
-inline bool LockFreeQueue<T, size>::pop(T& returnedElement)
+template<typename T, size_t _size>
+inline bool LockFreeQueue<T, _size>::pop(T& returnedElement)
 {
 	auto beforeSize = size.fetch_sub(1);
 	if (beforeSize <= 0)

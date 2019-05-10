@@ -10,7 +10,7 @@
 
 int main()
 {
-	constexpr size_t bufferSize = 100000;
+	constexpr size_t bufferSize = 10000;
 	constexpr size_t threadSize = 8;
 	LockFreeQueue<int, bufferSize> lockFreeQueueTest;
 	HANDLE hEvent;
@@ -22,7 +22,7 @@ int main()
 	std::cout << "버퍼 사이즈(수행 수) : " << bufferSize << std::endl;
 	std::cout << "쓰레드 수 : " << threadSize << std::endl << std::endl;
 
-	for (int i = 0; i < threadSize; ++i)
+	for (int j = 0; j < threadSize; ++j)
 	{
 		std::vector<std::thread> threads;
 		for (int i = 0; i < threadSize; ++i)
@@ -69,7 +69,7 @@ int main()
 		std::cout << "내가 만든 락프리 팝 소모시간 : " << duration.count() << std::endl << std::endl;
 	}
 
-	for (int i = 0; i < threadSize; ++i)
+	for (int j = 0; j < threadSize; ++j)
 	{
 		concurrency::concurrent_queue<int> t;
 		std::vector<std::thread> threads;
@@ -117,6 +117,7 @@ int main()
 		std::cout << "컨커런시 팝 소모시간 : " << duration.count() << std::endl << std::endl;
 	}
 
+	for (int j = 0; j < threadSize; ++j)
 	{
 		std::queue<int> t;
 		std::recursive_mutex lock;
@@ -167,6 +168,6 @@ int main()
 		duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now() - now);
 		std::cout << "락 큐 팝 소모시간 : " << duration.count() << std::endl << std::endl;
 
-		system("pause");
 	}
+	system("pause");
 }
